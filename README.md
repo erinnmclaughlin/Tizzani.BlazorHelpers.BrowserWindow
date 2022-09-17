@@ -1,7 +1,9 @@
 ### Option 1: Use EventCallbacks
 
 ```html
-<BrowserWindowInfo OnResize="UpdateDimensions" OnScroll="UpdatePageOffset" />
+
+<BrowserDimensionsInfo OnResize="UpdateDimensions" />
+<BrowserPageOffsetInfo OnScroll="UpdatePageOffset" />
 
 @if (Dimensions == null || PageOffset == null)
 {
@@ -40,10 +42,10 @@ else
 }
 ```
 
-### Option 2: Use Cascading-ish Values
+### Option 2: Use Component Context
 ```html
-<BrowserDimensionsView Context="dimensions">
-    <BrowserPageOffsetView Context="offset">
+<BrowserDimensionsInfo Context="dimensions">
+    <BrowserPageOffsetInfo Context="offset">
         <dl>
             <dt>Page Offset</dt>
             <dd>@offset.X, @offset.Y</dd>
