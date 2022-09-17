@@ -6,9 +6,6 @@ public class BrowserWindowService : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
-    public static event Func<ValueTask>? OnResize;
-    public static event Func<ValueTask>? OnScroll;
-
     public BrowserWindowService(IJSRuntime jsRuntime)
     {
         _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
@@ -45,30 +42,16 @@ public class BrowserWindowService : IAsyncDisposable
         return await module.InvokeAsync<BrowserWindowPageOffset>("getPageOffset");
     }
 
-    public async ValueTask SubscribeToResize()
+    public async ValueTask AddResizeEventListener()
     {
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("subscribeToResize");
+        await module.InvokeVoidAsync("addResizeEventListener");
     }
 
-    public async ValueTask SubscribeToScroll()
+    public async ValueTask AddScrollEventListener()
     {
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("subscribeToScroll");
-    }
-
-    [JSInvokable]
-    public static async Task OnBrowserResize()
-    {
-        if (OnResize != null)
-            await OnResize.Invoke();
-    }
-
-    [JSInvokable]
-    public static async Task OnBrowserScroll()
-    {
-        if (OnScroll != null)
-            await OnScroll.Invoke();
+        await module.InvokeVoidAsync("addScrollEventListener");
     }
 
     public async ValueTask DisposeAsync()

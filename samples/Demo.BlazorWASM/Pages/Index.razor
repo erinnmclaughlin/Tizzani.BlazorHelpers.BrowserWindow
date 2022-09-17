@@ -10,7 +10,7 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-@if (Window == null)
+@if (BrowserWindow == null)
 {
     <p>Loading window info...</p>
 }
@@ -18,43 +18,43 @@ else
 {
     <dl>
         <dt>Page Offset</dt>
-        <dd>@Window.PageOffset.X, @Window.PageOffset.Y</dd>
+        <dd>@BrowserWindow.PageOffset.X, @BrowserWindow.PageOffset.Y</dd>
         <dt>Inner Height</dt>
-        <dd>@(Window.InnerHeight)px</dd>
+        <dd>@(BrowserWindow.InnerHeight)px</dd>
         <dt>Inner Width</dt>
-        <dd>@(Window.InnerWidth)px</dd>
+        <dd>@(BrowserWindow.InnerWidth)px</dd>
         <dt>Outer Height</dt>
-        <dd>@(Window.OuterHeight)px</dd>
+        <dd>@(BrowserWindow.OuterHeight)px</dd>
         <dt>Outer Width</dt>
-        <dd>@(Window.OuterWidth)px</dd>
+        <dd>@(BrowserWindow.OuterWidth)px</dd>
     </dl>
 }
 
 @code {
 
-    private BrowserWindow? Window { get; set; }
+    private BrowserWindow? BrowserWindow { get; set; }
 
     public void Dispose()
     {
-        BrowserWindowService.OnResize -= LoadBrowserWindow;
-        BrowserWindowService.OnScroll -= LoadBrowserWindow;
+        BrowserWindow.OnResize -= LoadBrowserWindow;
+        BrowserWindow.OnScroll -= LoadBrowserWindow;
         GC.SuppressFinalize(this);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await BrowserService.SubscribeToResize();
-        await BrowserService.SubscribeToScroll();
+        await BrowserService.AddResizeEventListener();
+        await BrowserService.AddScrollEventListener();
 
-        BrowserWindowService.OnResize += LoadBrowserWindow;
-        BrowserWindowService.OnScroll += LoadBrowserWindow;
+        BrowserWindow.OnResize += LoadBrowserWindow;
+        BrowserWindow.OnScroll += LoadBrowserWindow;
 
         await LoadBrowserWindow();
     }
 
     private async ValueTask LoadBrowserWindow()
     {
-        Window = await BrowserService.GetBrowserWindow();
+        BrowserWindow = await BrowserService.GetBrowserWindow();
         StateHasChanged();
     }
 }

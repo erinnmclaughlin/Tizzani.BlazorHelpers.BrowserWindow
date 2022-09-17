@@ -38,18 +38,18 @@ export function getPageOffset() {
     };
 }
 
-export function subscribeToResize() {
+export function addResizeEventListener() {
     window.addEventListener('resize', onResize);
 }
 
-export function subscribeToScroll() {
+export function addScrollEventListener() {
     window.addEventListener('scroll', onScroll);
 }
 
 function onResize() {
-    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'OnBrowserResize');
+    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResize');
 }
 
 function onScroll() {
-    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'OnBrowserScroll');
+    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScroll');
 }
