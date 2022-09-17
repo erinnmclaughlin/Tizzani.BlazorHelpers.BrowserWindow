@@ -1,0 +1,11 @@
+﻿<BrowserDimensionsInfo Debounce="Debounce">
+    <CascadingValue Value="@context">
+        @ChildContent
+    </CascadingValue>
+</BrowserDimensionsInfo>
+
+@code {
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public int Debounce { get; set; } = 300;
+}

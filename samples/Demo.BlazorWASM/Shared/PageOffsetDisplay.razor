@@ -1,0 +1,16 @@
+﻿@if (PageOffset == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <dl>
+        <dt>Page Offset</dt>
+        <dd>@PageOffset.X, @PageOffset.Y</dd>
+    </dl>
+}
+
+
+@code {
+    [CascadingParameter] private BrowserWindowPageOffset? PageOffset { get; set; }
+}

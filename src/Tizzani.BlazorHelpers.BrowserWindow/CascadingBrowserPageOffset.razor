@@ -1,0 +1,11 @@
+﻿<BrowserPageOffsetInfo Debounce="Debounce">
+    <CascadingValue Value="@context">
+        @ChildContent
+    </CascadingValue>
+</BrowserPageOffsetInfo>
+
+@code {
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public int Debounce { get; set; } = 300;
+}

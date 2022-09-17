@@ -1,1 +1,21 @@
-﻿
+﻿@if (Dimensions == null)
+{
+    <p>Loading dimensions...</p>
+}
+else
+{
+    <dl>
+        <dt>Inner Height</dt>
+        <dd>@(Dimensions.InnerDimensions.Height)px</dd>
+        <dt>Inner Width</dt>
+        <dd>@(Dimensions.InnerDimensions.Width)px</dd>
+        <dt>Outer Height</dt>
+        <dd>@(Dimensions.OuterDimensions.Height)px</dd>
+        <dt>Outer Width</dt>
+        <dd>@(Dimensions.OuterDimensions.Width)px</dd>
+    </dl>
+}
+
+@code  {
+    [CascadingParameter] private BrowserWindowDimensions? Dimensions { get; set; }
+}
