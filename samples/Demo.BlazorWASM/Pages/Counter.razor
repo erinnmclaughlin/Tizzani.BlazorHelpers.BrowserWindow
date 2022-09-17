@@ -1,7 +1,20 @@
 ﻿@page "/counter"
 
-<BrowserDimensionsView Context="dimensions">
-    <BrowserPageOffsetView Context="offset">
+<h1>Cascading Window Info</h1>
+
+<EditForm Model="this" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+    <div class="form-group">
+        <label for="resizeDebounce">Resize Debounce [ms]</label>
+        <InputNumber @bind-Value="ResizeDebounce" id="resizeDebounce" class="form-control" min="0" />
+    </div>
+    <div class="form-group">
+        <label for="scrollDebounce">Scroll Debounce [ms]</label>
+        <InputNumber @bind-Value="ScrollDebounce" id="scrollDebounce" class="form-control" min="0" />
+    </div>
+</EditForm>
+
+<BrowserDimensionsView Context="dimensions" Debounce="ResizeDebounce">
+    <BrowserPageOffsetView Context="offset" Debounce="ScrollDebounce">
         <dl>
             <dt>Page Offset</dt>
             <dd>@offset.X, @offset.Y</dd>
@@ -13,6 +26,12 @@
             <dd>@(dimensions.OuterDimensions.Height)px</dd>
             <dt>Outer Width</dt>
             <dd>@(dimensions.OuterDimensions.Width)px</dd>
-    </dl>
+        </dl>
     </BrowserPageOffsetView>
 </BrowserDimensionsView>
+
+@code {
+
+    public int ResizeDebounce { get; set; } = 300;
+    public int ScrollDebounce { get; set; } = 300;
+}

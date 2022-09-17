@@ -1,4 +1,5 @@
-﻿@using Tizzani.BlazorHelpers.BrowserWindow.Services
+﻿@using System.Timers
+@using Tizzani.BlazorHelpers.BrowserWindow.Services
 @inject IBrowserWindowService WindowService
 @implements IDisposable
 
@@ -8,25 +9,60 @@
 }
 
 @code {
-
+    private Timer DebounceTimer { get; set; } = new();
     private BrowserWindowPageOffset? PageOffset { get; set; }
 
+    [Parameter] public int Debounce { get; set; } = 300;
     [Parameter] public RenderFragment<BrowserWindowPageOffset>? ChildContent { get; set; }
+    [Parameter] public EventCallback<BrowserWindowPageOffset> OnScroll { get; set; }
 
     public void Dispose()
     {
-        BrowserScrollListener.OnScroll -= LoadPageOffset;
+        BrowserScrollListener.OnScroll -= ResetTimer;
+        DebounceTimer.Dispose();
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await LoadPageOffset();
-        BrowserScrollListener.OnScroll += LoadPageOffset;
+        BrowserScrollListener.OnScroll += ResetTimer;
+
+        DebounceTimer.AutoReset = false;
+        DebounceTimer.Elapsed += LoadPageOffset;
     }
 
-    private async ValueTask LoadPageOffset()
+    protected override Task OnInitializedAsync()
+    {
+        return LoadPageOffset();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Debounce < 10)
+            Debounce = 10;
+
+        if (DebounceTimer.Interval != Debounce)
+            DebounceTimer.Interval = Debounce;
+    }
+
+    private ValueTask ResetTimer()
+    {
+        DebounceTimer.Stop();
+        DebounceTimer.Start();
+
+        return ValueTask.CompletedTask;
+    }
+
+    private async Task LoadPageOffset()
     {
         PageOffset = await WindowService.GetPageOffset();
-        StateHasChanged();
+
+        if (OnScroll.HasDelegate)
+            await OnScroll.InvokeAsync(PageOffset);
+    }
+
+    private async void LoadPageOffset(object? source, ElapsedEventArgs e)
+    {
+        await LoadPageOffset();
+        await InvokeAsync(StateHasChanged);
     }
 }

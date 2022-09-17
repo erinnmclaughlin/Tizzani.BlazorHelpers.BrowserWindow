@@ -1,6 +1,9 @@
 ﻿@page "/"
 
-<BrowserWindowInfo OnResize="UpdateDimensions" OnScroll="UpdatePageOffset" />
+<h1>Using EventCallbacks</h1>
+
+<BrowserDimensionsView OnResize="UpdateDimensions" />
+<BrowserPageOffsetView OnScroll="UpdatePageOffset" />
 
 @if (Dimensions == null || PageOffset == null)
 {
