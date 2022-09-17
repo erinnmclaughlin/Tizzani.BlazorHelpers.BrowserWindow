@@ -1,12 +1,17 @@
 ﻿@using Tizzani.BlazorHelpers.BrowserWindow.Services
 @inject BrowserWindowRegistrationService RegistrationService
+@inject BrowserWindowSettings Settings
 @implements IAsyncDisposable
 
 @code {
 
     protected override async Task OnParametersSetAsync()
     {
-        await RegistrationService.AddEventListeners();
+        if (Settings.ListenForResizeEvent)
+            await RegistrationService.AddResizeEventListener();
+
+        if (Settings.ListenForScrollEvent)
+            await RegistrationService.AddScrollEventListener();
     }
 
     public async ValueTask DisposeAsync()

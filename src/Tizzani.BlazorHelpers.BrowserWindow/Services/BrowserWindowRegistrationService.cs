@@ -9,23 +9,10 @@ internal sealed class BrowserWindowRegistrationService : IAsyncDisposable
     private bool IsListeningForResize { get; set; }
     private bool IsListeningForScroll { get; set; }
 
-    public BrowserWindowSettings Settings { get; }
-
-    public BrowserWindowRegistrationService(IJSRuntime jsRuntime, BrowserWindowSettings settings)
+    public BrowserWindowRegistrationService(IJSRuntime jsRuntime)
     {
         _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/Tizzani.BlazorHelpers.BrowserWindow/main.js").AsTask());
-
-        Settings = settings;
-    }
-
-    public async ValueTask AddEventListeners()
-    {
-        if (Settings.ListenForResizeEvent)
-            await AddResizeEventListener();
-
-        if (Settings.ListenForScrollEvent)
-            await AddScrollEventListener();
     }
 
     public async ValueTask AddResizeEventListener()
