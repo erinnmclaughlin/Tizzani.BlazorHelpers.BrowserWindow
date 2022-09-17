@@ -61,3 +61,45 @@ else
     </BrowserPageOffsetView>
 </BrowserDimensionsView>
 ```
+
+### Option 3: Use Cascading Values
+###### App.razor
+```html
+<CascadingBrowserDimensions>
+<CascadingBrowserPageOffset>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingBrowserDimensions>
+</CascadingBrowserPageOffset>
+```
+
+###### BrowserInfo.razor
+```html
+<dl>
+    <dt>Page Offset</dt>
+    <dd>@offset.X, @offset.Y</dd>
+    <dt>Inner Height</dt>
+    <dd>@(dimensions.InnerDimensions.Height)px</dd>
+    <dt>Inner Width</dt>
+    <dd>@(dimensions.InnerDimensions.Width)px</dd>
+    <dt>Outer Height</dt>
+    <dd>@(dimensions.OuterDimensions.Height)px</dd>
+    <dt>Outer Width</dt>
+    <dd>@(dimensions.OuterDimensions.Width)px</dd>
+</dl>
+
+@code {
+    [CascadingValue] private BrowserWindowDimensions? Dimensions { get; set; }
+    [CascadingValue] private BrowserWindowPageOffset? PageOffset { get; set; }
+}
+```
