@@ -39,7 +39,6 @@ export function getPageOffset() {
 }
 
 /* Resize Event Management */
-
 export function addResizeEventListener() {
     window.addEventListener('resize', onResize);
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResizeListenerAdded');
@@ -51,12 +50,10 @@ export function removeResizeEventListener() {
 }
 
 function onResize() {
-    console.log('resized!');
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResize');
 }
 
 /* Scroll Event Management */
-
 export function addScrollEventListener() {
     window.addEventListener('scroll', onScroll);
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScrollListenerAdded');
