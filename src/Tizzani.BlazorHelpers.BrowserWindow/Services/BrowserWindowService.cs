@@ -2,7 +2,7 @@ using Microsoft.JSInterop;
 
 namespace Tizzani.BlazorHelpers.BrowserWindow.Services;
 
-internal class BrowserWindowService : IAsyncDisposable, IBrowserWindowService
+internal class BrowserWindowService : IBrowserWindowService
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 

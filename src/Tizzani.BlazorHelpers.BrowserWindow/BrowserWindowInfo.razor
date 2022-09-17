@@ -1,34 +1,29 @@
 ﻿@using Tizzani.BlazorHelpers.BrowserWindow.Services
-@inject BrowserWindowRegistrationService RegistrationService
 @inject IBrowserWindowService WindowService
-@implements IAsyncDisposable
+@implements IDisposable
 
 @code {
 
     [Parameter] public EventCallback<BrowserWindowDimensions> OnResize { get; set; }
     [Parameter] public EventCallback<BrowserWindowPageOffset> OnScroll { get; set; }
 
-    public async ValueTask DisposeAsync()
+    public void Dispose()
     {
-        BrowserWindow.OnResize -= HandleResize;
-        BrowserWindow.OnScroll -= HandleScroll;
-
-        await RegistrationService.DisposeAsync();
+        BrowserResizeListener.OnResize -= HandleResize;
+        BrowserScrollListener.OnScroll -= HandleScroll;
     }
 
     protected override async Task OnInitializedAsync()
     {
         if (OnResize.HasDelegate)
         {
-            await RegistrationService.AddResizeEventListener();
-            BrowserWindow.OnResize += HandleResize;
+            BrowserResizeListener.OnResize += HandleResize;
             await HandleResize();
         }
 
         if (OnScroll.HasDelegate)
         {
-            await RegistrationService.AddScrollEventListener();
-            BrowserWindow.OnScroll += HandleScroll;
+            BrowserScrollListener.OnScroll += HandleScroll;
             await HandleScroll();
         }
     }

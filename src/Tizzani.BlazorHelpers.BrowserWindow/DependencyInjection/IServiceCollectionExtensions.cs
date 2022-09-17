@@ -7,14 +7,9 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddBrowserWindowService(this IServiceCollection services)
     {
-        return services.AddBrowserWindowService(BrowserWindowSettings.Default);
-    }
-
-    public static IServiceCollection AddBrowserWindowService(this IServiceCollection services, BrowserWindowSettings settings)
-    {
         return services
-            .AddSingleton(settings)
-            .AddSingleton<BrowserWindowRegistrationService>()
+            .AddSingleton<BrowserResizeListener>()
+            .AddSingleton<BrowserScrollListener>()
             .AddSingleton<IBrowserWindowService, BrowserWindowService>();
     }
 }

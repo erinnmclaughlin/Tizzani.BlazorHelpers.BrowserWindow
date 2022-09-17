@@ -1,6 +1,6 @@
 ﻿namespace Tizzani.BlazorHelpers.BrowserWindow;
 
-public interface IBrowserWindowService
+public interface IBrowserWindowService : IAsyncDisposable
 {
     ValueTask<BrowserWindow> GetBrowserWindow();
     ValueTask<float> GetDevicePixelRatio();

@@ -38,16 +38,32 @@ export function getPageOffset() {
     };
 }
 
+/* Resize Event Management */
+
 export function addResizeEventListener() {
     window.addEventListener('resize', onResize);
+    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResizeListenerAdded');
 }
 
-export function addScrollEventListener() {
-    window.addEventListener('scroll', onScroll);
+export function removeResizeEventListener() {
+    window.removeEventListener('resize', onResize);
+    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResizeListenerRemoved');
 }
 
 function onResize() {
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResize');
+}
+
+/* Scroll Event Management */
+
+export function addScrollEventListener() {
+    window.addEventListener('scroll', onScroll);
+    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScrollListenerAdded');
+}
+
+export function removeScrollEventListener() {
+    window.removeEventListener('scroll', onScroll);
+    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScrollListenerRemoved');
 }
 
 function onScroll() {

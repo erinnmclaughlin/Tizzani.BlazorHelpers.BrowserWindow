@@ -1,8 +1,8 @@
 ﻿@page "/"
 @inject IBrowserWindowService BrowserService
-@implements IDisposable
 
 <PageTitle>Index</PageTitle>
+<BrowserWindowInfo OnResize="UpdateDimensions" OnScroll="UpdatePageOffset" />
 
 <h1>Hello, world!</h1>
 
@@ -12,7 +12,7 @@ Welcome to your new app.
 
 @if (BrowserWindow == null)
 {
-    <p>Loading window info...</p>
+    <p>Loading browser window info...</p>
 }
 else
 {
@@ -30,28 +30,23 @@ else
     </dl>
 }
 
+
 @code {
 
     private BrowserWindow? BrowserWindow { get; set; }
 
-    public void Dispose()
-    {
-        BrowserWindow.OnResize -= LoadBrowserWindow;
-        BrowserWindow.OnScroll -= LoadBrowserWindow;
-        GC.SuppressFinalize(this);
-    }
-
     protected override async Task OnInitializedAsync()
     {
-        BrowserWindow.OnResize += LoadBrowserWindow;
-        BrowserWindow.OnScroll += LoadBrowserWindow;
-
-        await LoadBrowserWindow();
+        BrowserWindow = await BrowserService.GetBrowserWindow();
     }
 
-    private async ValueTask LoadBrowserWindow()
+    private void UpdateDimensions(BrowserWindowDimensions dimensions)
     {
-        BrowserWindow = await BrowserService.GetBrowserWindow();
-        StateHasChanged();
+        BrowserWindow = BrowserWindow! with { Dimensions = dimensions };
+    }
+
+    private void UpdatePageOffset(BrowserWindowPageOffset pageOffset)
+    {        
+        BrowserWindow = BrowserWindow! with { PageOffset = pageOffset };
     }
 }
