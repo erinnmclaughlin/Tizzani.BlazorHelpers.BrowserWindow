@@ -1,0 +1,10 @@
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Services
+@inject BrowserWindowRegistrationService RegistrationService
+
+@code {
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await RegistrationService.AddEventListeners();
+    }
+}

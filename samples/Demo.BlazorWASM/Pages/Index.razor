@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject BrowserWindowService BrowserService
+@inject IBrowserWindowService BrowserService
 @implements IDisposable
 
 <PageTitle>Index</PageTitle>
@@ -43,9 +43,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await BrowserService.AddResizeEventListener();
-        await BrowserService.AddScrollEventListener();
-
         BrowserWindow.OnResize += LoadBrowserWindow;
         BrowserWindow.OnScroll += LoadBrowserWindow;
 

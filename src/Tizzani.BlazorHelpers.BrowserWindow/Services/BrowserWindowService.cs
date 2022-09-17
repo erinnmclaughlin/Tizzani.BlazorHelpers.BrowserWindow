@@ -1,8 +1,8 @@
 using Microsoft.JSInterop;
 
-namespace Tizzani.BlazorHelpers.BrowserWindow;
+namespace Tizzani.BlazorHelpers.BrowserWindow.Services;
 
-public class BrowserWindowService : IAsyncDisposable
+internal class BrowserWindowService : IAsyncDisposable, IBrowserWindowService
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
@@ -40,18 +40,6 @@ public class BrowserWindowService : IAsyncDisposable
     {
         var module = await _moduleTask.Value;
         return await module.InvokeAsync<BrowserWindowPageOffset>("getPageOffset");
-    }
-
-    public async ValueTask AddResizeEventListener()
-    {
-        var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("addResizeEventListener");
-    }
-
-    public async ValueTask AddScrollEventListener()
-    {
-        var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("addScrollEventListener");
     }
 
     public async ValueTask DisposeAsync()
