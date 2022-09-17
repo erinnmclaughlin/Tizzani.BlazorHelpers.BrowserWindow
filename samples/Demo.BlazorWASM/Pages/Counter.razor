@@ -13,8 +13,8 @@
     </div>
 </EditForm>
 
-<BrowserDimensionsView Context="dimensions" Debounce="ResizeDebounce">
-    <BrowserPageOffsetView Context="offset" Debounce="ScrollDebounce">
+<BrowserDimensionsInfo Context="dimensions" Debounce="ResizeDebounce">
+    <BrowserPageOffsetInfo Context="offset" Debounce="ScrollDebounce">
         <dl>
             <dt>Page Offset</dt>
             <dd>@offset.X, @offset.Y</dd>
@@ -27,8 +27,8 @@
             <dt>Outer Width</dt>
             <dd>@(dimensions.OuterDimensions.Width)px</dd>
         </dl>
-    </BrowserPageOffsetView>
-</BrowserDimensionsView>
+    </BrowserPageOffsetInfo>
+</BrowserDimensionsInfo>
 
 @code {
 
