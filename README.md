@@ -42,7 +42,7 @@ else
 }
 ```
 
-### Option 2: Use Cascading-ish Values
+### Option 2: Use Component Context
 ```html
 <BrowserDimensionsInfo Context="dimensions">
     <BrowserPageOffsetInfo Context="offset">
