@@ -51,6 +51,7 @@ export function removeResizeEventListener() {
 }
 
 function onResize() {
+    console.log('resized!');
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResize');
 }
 
@@ -67,5 +68,6 @@ export function removeScrollEventListener() {
 }
 
 function onScroll() {
+    console.log('scrolled!');
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScroll');
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.ComponentModel;
 
 namespace Tizzani.BlazorHelpers.BrowserWindow.Services;
 
@@ -6,11 +7,19 @@ public class BrowserResizeListener : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
-    private static Action? OnSubscriptionAdded { get; set; }
-    private static Action? OnSubscriptionRemoved { get; set; }
-    private static bool IsSubscribed { get; set; }
-    private static int SubscriptionCount => _onResize?.GetInvocationList().Length ?? 0;
-    private static bool ShouldSubscribe => SubscriptionCount > 0;
+    private static Action? OnSubscriptionChanged;
+    private static Action? OnSubscriptionCountChanged;
+
+    private static bool _isSubscribed;
+    private static bool IsSubscribed
+    {
+        get => _isSubscribed;
+        set
+        {
+            _isSubscribed = value;
+            OnSubscriptionChanged?.Invoke();
+        }
+    }
 
     private static event Func<ValueTask>? _onResize;
     public static event Func<ValueTask>? OnResize
@@ -18,13 +27,13 @@ public class BrowserResizeListener : IAsyncDisposable
         add
         {
             _onResize += value;
-            OnSubscriptionAdded?.Invoke();
+            OnSubscriptionCountChanged?.Invoke();
 
         }
         remove
         {
             _onResize -= value;
-            OnSubscriptionRemoved?.Invoke();
+            OnSubscriptionCountChanged?.Invoke();
         }
     }
 
@@ -33,14 +42,14 @@ public class BrowserResizeListener : IAsyncDisposable
         _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/Tizzani.BlazorHelpers.BrowserWindow/main.js").AsTask());
 
-        OnSubscriptionAdded += HandleSubscriptionCountChanged;
-        OnSubscriptionRemoved += HandleSubscriptionCountChanged;
+        OnSubscriptionChanged += VerifySubscriptionState;
+        OnSubscriptionCountChanged += VerifySubscriptionState;
     }
 
     public async ValueTask DisposeAsync()
     {
-        OnSubscriptionAdded -= HandleSubscriptionCountChanged;
-        OnSubscriptionRemoved -= HandleSubscriptionCountChanged;
+        OnSubscriptionChanged -= VerifySubscriptionState;
+        OnSubscriptionCountChanged -= VerifySubscriptionState;
 
         if (_moduleTask.IsValueCreated)
         {
@@ -70,12 +79,15 @@ public class BrowserResizeListener : IAsyncDisposable
         IsSubscribed = false;
     }
 
-    private async void HandleSubscriptionCountChanged()
+    private async void VerifySubscriptionState()
     {
-        if (ShouldSubscribe == IsSubscribed)
+        var count = _onResize?.GetInvocationList().Length ?? 0;
+        var shouldSubscribe = count > 0;
+
+        if (shouldSubscribe == IsSubscribed)
             return;
 
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync(ShouldSubscribe ? "addResizeEventListener" : "removeResizeEventListener");
+        await module.InvokeVoidAsync(shouldSubscribe ? "addResizeEventListener" : "removeResizeEventListener");
     }
 }

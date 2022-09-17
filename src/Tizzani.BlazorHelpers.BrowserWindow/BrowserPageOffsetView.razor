@@ -1,0 +1,32 @@
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Services
+@inject IBrowserWindowService WindowService
+@implements IDisposable
+
+@if (ChildContent != null && PageOffset != null)
+{
+    @ChildContent(PageOffset)
+}
+
+@code {
+
+    private BrowserWindowPageOffset? PageOffset { get; set; }
+
+    [Parameter] public RenderFragment<BrowserWindowPageOffset>? ChildContent { get; set; }
+
+    public void Dispose()
+    {
+        BrowserScrollListener.OnScroll -= LoadPageOffset;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPageOffset();
+        BrowserScrollListener.OnScroll += LoadPageOffset;
+    }
+
+    private async ValueTask LoadPageOffset()
+    {
+        PageOffset = await WindowService.GetPageOffset();
+        StateHasChanged();
+    }
+}

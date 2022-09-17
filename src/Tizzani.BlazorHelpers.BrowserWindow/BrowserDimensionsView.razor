@@ -1,0 +1,32 @@
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Services
+@inject IBrowserWindowService WindowService
+@implements IDisposable
+
+@if (ChildContent != null && Dimensions != null)
+{
+    @ChildContent(Dimensions)
+}
+
+@code {
+
+    private BrowserWindowDimensions? Dimensions { get; set; }
+
+    [Parameter] public RenderFragment<BrowserWindowDimensions>? ChildContent { get; set; }
+
+    public void Dispose()
+    {
+        BrowserResizeListener.OnResize -= LoadDimensions;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDimensions();
+        BrowserResizeListener.OnResize += LoadDimensions;
+    }
+
+    private async ValueTask LoadDimensions()
+    {
+        Dimensions = await WindowService.GetDimensions();
+        StateHasChanged();
+    }
+}
