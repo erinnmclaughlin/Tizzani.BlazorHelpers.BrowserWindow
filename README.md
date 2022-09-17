@@ -55,7 +55,7 @@ else
             <dd>@(dimensions.OuterDimensions.Height)px</dd>
             <dt>Outer Width</dt>
             <dd>@(dimensions.OuterDimensions.Width)px</dd>
-    </dl>
+        </dl>
     </BrowserPageOffsetView>
 </BrowserDimensionsView>
 ```
