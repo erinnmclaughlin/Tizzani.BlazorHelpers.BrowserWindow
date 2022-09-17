@@ -1,6 +1,7 @@
 ﻿@page "/counter"
 
 <PageTitle>Counter</PageTitle>
+<BrowserWindowInfo OnResize="HandleResize" />
 
 <h1>Counter</h1>
 
@@ -8,11 +9,33 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+@if (BrowserDimensions == null)
+{
+    <p>Loading browser dimensions...</p>
+}
+else
+{
+    <dl>
+        <dt>Inner Height</dt>
+        <dd>@(BrowserDimensions.InnerDimensions.Height)px</dd>
+        <dt>Inner Width</dt>
+        <dd>@(BrowserDimensions.InnerDimensions.Width)px</dd>
+        <dt>Outer Height</dt>
+        <dd>@(BrowserDimensions.OuterDimensions.Height)px</dd>
+        <dt>Outer Width</dt>
+        <dd>@(BrowserDimensions.OuterDimensions.Width)px</dd>
+    </dl>
+}
+
 @code {
     private int currentCount = 0;
+
+    private BrowserWindowDimensions? BrowserDimensions { get; set; }
 
     private void IncrementCount()
     {
         currentCount++;
     }
+
+    private void HandleResize(BrowserWindowDimensions browserDimensions) => BrowserDimensions = browserDimensions;
 }

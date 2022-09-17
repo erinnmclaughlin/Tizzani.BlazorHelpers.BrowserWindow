@@ -24,6 +24,12 @@ internal class BrowserWindowService : IAsyncDisposable, IBrowserWindowService
         return await module.InvokeAsync<float>("getDevicePixelRatio");
     }
 
+    public async ValueTask<BrowserWindowDimensions> GetDimensions()
+    {
+        var module = await _moduleTask.Value;
+        return await module.InvokeAsync<BrowserWindowDimensions>("getDimensions");
+    }
+
     public async ValueTask<BrowserWindowInnerDimensions> GetInnerDimensions()
     {
         var module = await _moduleTask.Value;
