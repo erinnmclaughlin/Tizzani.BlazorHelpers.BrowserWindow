@@ -1,13 +1,15 @@
 export function getBrowserWindow() {
     return {
         DevicePixelRatio: window.devicePixelRatio,
-        InnerDimensions: {
-            Height: window.innerHeight,
-            Width: window.innerWidth
-        },
-        OuterDimensions: {
-            Height: window.outerHeight,
-            Width: window.outerWidth
+        Size: {
+            InnerDimensions: {
+                Height: window.innerHeight,
+                Width: window.innerWidth
+            },
+            OuterDimensions: {
+                Height: window.outerHeight,
+                Width: window.outerWidth
+            }
         },
         PageOffset: {
             X: window.pageXOffset,

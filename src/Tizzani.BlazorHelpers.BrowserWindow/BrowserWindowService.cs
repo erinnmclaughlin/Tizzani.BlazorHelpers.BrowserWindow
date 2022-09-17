@@ -39,10 +39,10 @@ public class BrowserWindowService : IAsyncDisposable
         return await module.InvokeAsync<BrowserWindowDimensions>("getOuterDimensions");
     }
 
-    public async ValueTask<PageOffset> GetPageOffset()
+    public async ValueTask<BrowserWindowPageOffset> GetPageOffset()
     {
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<PageOffset>("getPageOffset");
+        return await module.InvokeAsync<BrowserWindowPageOffset>("getPageOffset");
     }
 
     public async ValueTask SubscribeToResize()
