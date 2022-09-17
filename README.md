@@ -40,7 +40,7 @@ else
 }
 ```
 
-### Option 1: Use Cascading-ish Values
+### Option 2: Use Cascading-ish Values
 ```html
 <BrowserDimensionsView Context="dimensions">
     <BrowserPageOffsetView Context="offset">
