@@ -1,16 +1,8 @@
 ﻿@page "/"
-@inject IBrowserWindowService BrowserService
 
-<PageTitle>Index</PageTitle>
 <BrowserWindowInfo OnResize="UpdateDimensions" OnScroll="UpdatePageOffset" />
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-@if (BrowserWindow == null)
+@if (Dimensions == null || PageOffset == null)
 {
     <p>Loading browser window info...</p>
 }
@@ -18,35 +10,30 @@ else
 {
     <dl>
         <dt>Page Offset</dt>
-        <dd>@BrowserWindow.PageOffset.X, @BrowserWindow.PageOffset.Y</dd>
+        <dd>@PageOffset.X, @PageOffset.Y</dd>
         <dt>Inner Height</dt>
-        <dd>@(BrowserWindow.InnerHeight)px</dd>
+        <dd>@(Dimensions.InnerDimensions.Height)px</dd>
         <dt>Inner Width</dt>
-        <dd>@(BrowserWindow.InnerWidth)px</dd>
+        <dd>@(Dimensions.InnerDimensions.Width)px</dd>
         <dt>Outer Height</dt>
-        <dd>@(BrowserWindow.OuterHeight)px</dd>
+        <dd>@(Dimensions.OuterDimensions.Height)px</dd>
         <dt>Outer Width</dt>
-        <dd>@(BrowserWindow.OuterWidth)px</dd>
+        <dd>@(Dimensions.OuterDimensions.Width)px</dd>
     </dl>
 }
 
-
 @code {
 
-    private BrowserWindow? BrowserWindow { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        BrowserWindow = await BrowserService.GetBrowserWindow();
-    }
+    private BrowserWindowDimensions? Dimensions { get; set; }
+    private BrowserWindowPageOffset? PageOffset { get; set; }
 
     private void UpdateDimensions(BrowserWindowDimensions dimensions)
     {
-        BrowserWindow = BrowserWindow! with { Dimensions = dimensions };
+        Dimensions = dimensions;
     }
 
     private void UpdatePageOffset(BrowserWindowPageOffset pageOffset)
-    {        
-        BrowserWindow = BrowserWindow! with { PageOffset = pageOffset };
+    {
+        PageOffset = pageOffset;
     }
 }

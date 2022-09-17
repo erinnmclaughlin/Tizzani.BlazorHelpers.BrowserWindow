@@ -65,6 +65,5 @@ export function removeScrollEventListener() {
 }
 
 function onScroll() {
-    console.log('scrolled!');
     DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScroll');
 }
