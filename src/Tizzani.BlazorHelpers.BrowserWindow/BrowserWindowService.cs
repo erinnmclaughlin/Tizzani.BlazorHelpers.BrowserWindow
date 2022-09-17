@@ -27,16 +27,16 @@ public class BrowserWindowService : IAsyncDisposable
         return await module.InvokeAsync<float>("getDevicePixelRatio");
     }
 
-    public async ValueTask<BrowserWindowDimensions> GetInnerDimensions()
+    public async ValueTask<BrowserWindowInnerDimensions> GetInnerDimensions()
     {
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<BrowserWindowDimensions>("getInnerDimensions");
+        return await module.InvokeAsync<BrowserWindowInnerDimensions>("getInnerDimensions");
     }
 
-    public async ValueTask<BrowserWindowDimensions> GetOuterDimensions()
+    public async ValueTask<BrowserWindowOuterDimensions> GetOuterDimensions()
     {
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<BrowserWindowDimensions>("getOuterDimensions");
+        return await module.InvokeAsync<BrowserWindowOuterDimensions>("getOuterDimensions");
     }
 
     public async ValueTask<BrowserWindowPageOffset> GetPageOffset()

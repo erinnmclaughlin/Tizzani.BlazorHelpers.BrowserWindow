@@ -1,2 +1,6 @@
 ﻿namespace Tizzani.BlazorHelpers.BrowserWindow;
-public sealed record BrowserWindowDimensions(float Height, float Width);
+public sealed record BrowserWindowDimensions
+(
+    BrowserWindowInnerDimensions InnerDimensions,
+    BrowserWindowOuterDimensions OuterDimensions
+);

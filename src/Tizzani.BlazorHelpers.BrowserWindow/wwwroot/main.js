@@ -1,25 +1,20 @@
 export function getBrowserWindow() {
     return {
-        DevicePixelRatio: window.devicePixelRatio,
-        Size: {
-            InnerDimensions: {
-                Height: window.innerHeight,
-                Width: window.innerWidth
-            },
-            OuterDimensions: {
-                Height: window.outerHeight,
-                Width: window.outerWidth
-            }
-        },
-        PageOffset: {
-            X: window.pageXOffset,
-            Y: window.pageYOffset
-        }
+        DevicePixelRatio: getDevicePixelRatio(),
+        Dimensions: getDimensions(),
+        PageOffset: getPageOffset()
     };
 }
 
 export function getDevicePixelRatio() {
     return window.devicePixelRatio;
+}
+
+export function getDimensions() {
+    return {
+        InnerDimensions: getInnerDimensions(),
+        OuterDimensions: getOuterDimensions()
+    };
 }
 
 export function getInnerDimensions() {
