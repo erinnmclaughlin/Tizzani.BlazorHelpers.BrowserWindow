@@ -1,9 +1,10 @@
 ### Option 1: Use EventCallbacks
 
 ```html
+@using Tizzani.BlazorHelpers.BrowserWindow.Models
 
-<BrowserDimensionsInfo OnResize="UpdateDimensions" />
-<BrowserPageOffsetInfo OnScroll="UpdatePageOffset" />
+<WindowDimensionsInfo OnResize="UpdateDimensions" />
+<PageOffsetInfo OnScroll="UpdatePageOffset" />
 
 @if (Dimensions == null || PageOffset == null)
 {
@@ -15,27 +16,27 @@ else
         <dt>Page Offset</dt>
         <dd>@PageOffset.X, @PageOffset.Y</dd>
         <dt>Inner Height</dt>
-        <dd>@(Dimensions.InnerDimensions.Height)px</dd>
+        <dd>@(Dimensions.InnerHeight)px</dd>
         <dt>Inner Width</dt>
-        <dd>@(Dimensions.InnerDimensions.Width)px</dd>
+        <dd>@(Dimensions.InnerWidth)px</dd>
         <dt>Outer Height</dt>
-        <dd>@(Dimensions.OuterDimensions.Height)px</dd>
+        <dd>@(Dimensions.OuterHeight)px</dd>
         <dt>Outer Width</dt>
-        <dd>@(Dimensions.OuterDimensions.Width)px</dd>
+        <dd>@(Dimensions.OuterWidth)px</dd>
     </dl>
 }
 
 @code {
 
-    private BrowserWindowDimensions? Dimensions { get; set; }
-    private BrowserWindowPageOffset? PageOffset { get; set; }
+    private WindowDimensions? Dimensions { get; set; }
+    private PageOffset? PageOffset { get; set; }
 
-    private void UpdateDimensions(BrowserWindowDimensions dimensions)
+    private void UpdateDimensions(WindowDimensions dimensions)
     {
         Dimensions = dimensions;
     }
 
-    private void UpdatePageOffset(BrowserWindowPageOffset pageOffset)
+    private void UpdatePageOffset(PageOffset pageOffset)
     {
         PageOffset = pageOffset;
     }
@@ -44,29 +45,30 @@ else
 
 ### Option 2: Use Component Context
 ```html
-<BrowserDimensionsInfo Context="dimensions">
-    <BrowserPageOffsetInfo Context="offset">
+<WindowDimensionsInfo Context="dimensions" Debounce="ResizeDebounce">
+    <PageOffsetInfo Context="offset" Debounce="ScrollDebounce">
         <dl>
             <dt>Page Offset</dt>
             <dd>@offset.X, @offset.Y</dd>
             <dt>Inner Height</dt>
-            <dd>@(dimensions.InnerDimensions.Height)px</dd>
+            <dd>@(dimensions.InnerHeight)px</dd>
             <dt>Inner Width</dt>
-            <dd>@(dimensions.InnerDimensions.Width)px</dd>
+            <dd>@(dimensions.InnerWidth)px</dd>
             <dt>Outer Height</dt>
-            <dd>@(dimensions.OuterDimensions.Height)px</dd>
+            <dd>@(dimensions.OuterHeight)px</dd>
             <dt>Outer Width</dt>
-            <dd>@(dimensions.OuterDimensions.Width)px</dd>
+            <dd>@(dimensions.OuterWidth)px</dd>
         </dl>
-    </BrowserPageOffsetView>
-</BrowserDimensionsView>
+    </PageOffsetInfo>
+</WindowDimensionsInfo>
+
 ```
 
 ### Option 3: Use Cascading Values
 ###### App.razor
 ```html
-<CascadingBrowserDimensions>
-    <CascadingBrowserPageOffset>
+<CascadingWindowDimensions>
+    <CascadingPageOffset>
         <Router AppAssembly="@typeof(App).Assembly">
             <Found Context="routeData">
                 <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -79,27 +81,29 @@ else
                 </LayoutView>
             </NotFound>
         </Router>
-    </CascadingBrowserDimensions>
-</CascadingBrowserPageOffset>
+    </CascadingPageOffset>
+</CascadingWindowDimensions>
 ```
 
 ###### BrowserInfo.razor
 ```html
+@using Tizzani.BlazorHelpers.BrowserWindow.Models
+
 <dl>
     <dt>Page Offset</dt>
-    <dd>@offset.X, @offset.Y</dd>
+    <dd>@PageOffset.X, @PageOffset.Y</dd>
     <dt>Inner Height</dt>
-    <dd>@(dimensions.InnerDimensions.Height)px</dd>
+    <dd>@(Dimensions.InnerHeight)px</dd>
     <dt>Inner Width</dt>
-    <dd>@(dimensions.InnerDimensions.Width)px</dd>
+    <dd>@(Dimensions.InnerWidth)px</dd>
     <dt>Outer Height</dt>
-    <dd>@(dimensions.OuterDimensions.Height)px</dd>
+    <dd>@(Dimensions.OuterHeight)px</dd>
     <dt>Outer Width</dt>
-    <dd>@(dimensions.OuterDimensions.Width)px</dd>
+    <dd>@(Dimensions.OuterWidth)px</dd>
 </dl>
 
 @code {
-    [CascadingValue] private BrowserWindowDimensions? Dimensions { get; set; }
-    [CascadingValue] private BrowserWindowPageOffset? PageOffset { get; set; }
+    [CascadingValue] private WindowDimensions? Dimensions { get; set; }
+    [CascadingValue] private PageOffset? PageOffset { get; set; }
 }
 ```
