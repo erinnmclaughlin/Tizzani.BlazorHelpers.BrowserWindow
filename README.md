@@ -67,8 +67,8 @@ else
 
 ### Option 2: Use Component Context
 ```html
-<WindowDimensionsInfo Context="dimensions" Debounce="ResizeDebounce">
-    <PageOffsetInfo Context="offset" Debounce="ScrollDebounce">
+<WindowDimensionsInfo Context="dimensions">
+    <PageOffsetInfo Context="offset">
         <dl>
             <dt>Page Offset</dt>
             <dd>@offset.X, @offset.Y</dd>
