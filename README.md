@@ -1,3 +1,31 @@
+# Tizzani.BlazorHelpers.BrowserWindow
+
+Some helper methods for getting resize and scroll events from the browser.
+
+[![Nuget](https://img.shields.io/nuget/v/Tizzani.BlazorHelpers.BrowserWindow)](https://www.nuget.org/packages/Tizzani.BlazorHelpers.BrowserWindow/1.0.0)
+
+## Setup
+
+### Register Services
+
+##### Program.cs (Blazor WASM)
+```csharp
+builder.Services.AddBrowserWindowService();
+```
+##### Startup.cs (Blazor Server)
+```csharp
+services.AddBrowserWindowService();
+```
+
+### Add Usings
+
+##### \_Imports.razor
+```csharp
+@using Tizzani.BlazorHelpers.BrowserWindow
+```
+
+## Example Usage
+
 ### Option 1: Use EventCallbacks
 
 ```html
@@ -65,7 +93,7 @@ else
 ```
 
 ### Option 3: Use Cascading Values
-###### App.razor
+##### App.razor
 ```html
 <CascadingWindowDimensions>
     <CascadingPageOffset>
@@ -85,7 +113,7 @@ else
 </CascadingWindowDimensions>
 ```
 
-###### BrowserInfo.razor
+##### BrowserInfo.razor
 ```html
 @using Tizzani.BlazorHelpers.BrowserWindow.Models
 
