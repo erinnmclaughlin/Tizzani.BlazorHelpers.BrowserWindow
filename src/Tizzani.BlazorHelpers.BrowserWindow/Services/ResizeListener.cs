@@ -6,19 +6,8 @@ public class ResizeListener : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
-    private static Action? OnSubscriptionChanged;
-    private static Action? OnSubscriptionCountChanged;
-
-    private static bool _isSubscribed;
-    private static bool IsSubscribed
-    {
-        get => _isSubscribed;
-        set
-        {
-            _isSubscribed = value;
-            OnSubscriptionChanged?.Invoke();
-        }
-    }
+    private static Action? OnSubscriptionAdded;
+    private static Action? OnSubscriptionRemoved;
 
     private static event Func<ValueTask>? _onResize;
     public static event Func<ValueTask>? OnResize
@@ -26,13 +15,13 @@ public class ResizeListener : IAsyncDisposable
         add
         {
             _onResize += value;
-            OnSubscriptionCountChanged?.Invoke();
+            OnSubscriptionAdded?.Invoke();
 
         }
         remove
         {
             _onResize -= value;
-            OnSubscriptionCountChanged?.Invoke();
+            OnSubscriptionRemoved?.Invoke();
         }
     }
 
@@ -41,22 +30,20 @@ public class ResizeListener : IAsyncDisposable
         _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/Tizzani.BlazorHelpers.BrowserWindow/main.js").AsTask());
 
-        OnSubscriptionChanged += VerifySubscriptionState;
-        OnSubscriptionCountChanged += VerifySubscriptionState;
+        OnSubscriptionAdded += HandleSubscriptionAdded;
+        OnSubscriptionRemoved += HandleSubscriptionRemoved;
     }
 
     public async ValueTask DisposeAsync()
     {
-        OnSubscriptionChanged -= VerifySubscriptionState;
-        OnSubscriptionCountChanged -= VerifySubscriptionState;
+        OnSubscriptionAdded -= HandleSubscriptionAdded;
+        OnSubscriptionRemoved -= HandleSubscriptionRemoved;
 
         if (_moduleTask.IsValueCreated)
         {
             var module = await _moduleTask.Value;
             await module.DisposeAsync();
         }
-
-        GC.SuppressFinalize(this);
     }
 
     [JSInvokable]
@@ -66,27 +53,20 @@ public class ResizeListener : IAsyncDisposable
             await _onResize.Invoke();
     }
 
-    [JSInvokable]
-    public static void NotifyResizeListenerAdded()
+    private async void HandleSubscriptionAdded()
     {
-        IsSubscribed = true;
+        var module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("addResizeEventListener");
     }
 
-    [JSInvokable]
-    public static void NotifyResizeListenerRemoved()
-    {
-        IsSubscribed = false;
-    }
-
-    private async void VerifySubscriptionState()
+    private async void HandleSubscriptionRemoved()
     {
         var count = _onResize?.GetInvocationList().Length ?? 0;
-        var shouldSubscribe = count > 0;
 
-        if (shouldSubscribe == IsSubscribed)
+        if (count > 0)
             return;
 
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync(shouldSubscribe ? "addResizeEventListener" : "removeResizeEventListener");
+        await module.InvokeVoidAsync("removeResizeEventListener");
     }
 }

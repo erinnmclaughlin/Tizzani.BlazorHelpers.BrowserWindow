@@ -10,12 +10,10 @@ export function getDimensions() {
 
 export function addResizeEventListener() {
     window.addEventListener('resize', onResize);
-    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResizeListenerAdded');
 }
 
 export function removeResizeEventListener() {
     window.removeEventListener('resize', onResize);
-    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyResizeListenerRemoved');
 }
 
 function onResize() {
@@ -32,12 +30,10 @@ export function getPageOffset() {
 
 export function addScrollEventListener() {
     window.addEventListener('scroll', onScroll);
-    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScrollListenerAdded');
 }
 
 export function removeScrollEventListener() {
     window.removeEventListener('scroll', onScroll);
-    DotNet.invokeMethodAsync('Tizzani.BlazorHelpers.BrowserWindow', 'NotifyScrollListenerRemoved');
 }
 
 function onScroll() {
