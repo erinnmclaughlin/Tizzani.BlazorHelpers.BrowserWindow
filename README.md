@@ -1,10 +1,8 @@
 # Tizzani.BlazorHelpers.BrowserWindow
 
-Some helper methods for getting resize and scroll events from the browser.
+Some helper methods for getting resize and scroll events from the browser. Currently compatible with **Blazor WebAssembly** only.
 
 [![Nuget](https://img.shields.io/nuget/v/Tizzani.BlazorHelpers.BrowserWindow)](https://www.nuget.org/packages/Tizzani.BlazorHelpers.BrowserWindow/1.0.0)
-
-Currently compatible with **Blazor WebAssembly** only.
 
 ## Setup
 
