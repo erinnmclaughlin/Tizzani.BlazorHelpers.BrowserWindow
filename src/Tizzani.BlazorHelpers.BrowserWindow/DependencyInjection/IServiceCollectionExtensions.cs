@@ -8,8 +8,8 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddBrowserWindowService(this IServiceCollection services)
     {
         return services
-            .AddSingleton<BrowserResizeListener>()
-            .AddSingleton<BrowserScrollListener>()
-            .AddSingleton<IBrowserWindowService, BrowserWindowService>();
+            .AddSingleton<ResizeListener>()
+            .AddSingleton<ScrollListener>()
+            .AddSingleton<IWindowService, WindowService>();
     }
 }

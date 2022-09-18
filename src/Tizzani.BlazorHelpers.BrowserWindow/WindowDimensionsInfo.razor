@@ -1,0 +1,50 @@
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Models
+@inject IWindowService WindowService
+@implements IDisposable
+
+@if (ChildContent != null && Dimensions != null)
+{
+    @ChildContent(Dimensions)
+}
+
+@code {
+
+    private DebounceTimer DebounceTimer { get; set; } = new();
+    private WindowDimensions? Dimensions { get; set; }
+
+    [Parameter] public RenderFragment<WindowDimensions>? ChildContent { get; set; }
+    [Parameter] public int Debounce { get; set; } = 300;
+    [Parameter] public EventCallback<WindowDimensions> OnResize { get; set; }
+
+    public void Dispose()
+    {
+        ResizeListener.OnResize -= DebounceTimer.Reset;
+        DebounceTimer.Dispose();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ResizeListener.OnResize += DebounceTimer.Reset;
+        DebounceTimer.Elapsed += LoadDimensions;
+        return LoadDimensions();
+    }
+
+    protected override void OnParametersSet()
+    {
+        DebounceTimer.Debounce = Debounce;
+    }
+
+    private async Task LoadDimensions()
+    {
+        Dimensions = await WindowService.GetDimensions();
+
+        if (OnResize.HasDelegate)
+            await OnResize.InvokeAsync(Dimensions);
+    }
+
+    private async void LoadDimensions(object? source, System.Timers.ElapsedEventArgs e)
+    {
+        await LoadDimensions();
+        await InvokeAsync(StateHasChanged);
+    }
+}

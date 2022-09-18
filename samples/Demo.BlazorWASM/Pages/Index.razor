@@ -1,9 +1,10 @@
-﻿@page "/"
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Models
+@page "/"
 
 <h1>Using EventCallbacks</h1>
 
-<BrowserDimensionsInfo OnResize="UpdateDimensions" />
-<BrowserPageOffsetInfo OnScroll="UpdatePageOffset" />
+<WindowDimensionsInfo OnResize="UpdateDimensions" />
+<PageOffsetInfo OnScroll="UpdatePageOffset" />
 
 @if (Dimensions == null || PageOffset == null)
 {
@@ -15,27 +16,27 @@ else
         <dt>Page Offset</dt>
         <dd>@PageOffset.X, @PageOffset.Y</dd>
         <dt>Inner Height</dt>
-        <dd>@(Dimensions.InnerDimensions.Height)px</dd>
+        <dd>@(Dimensions.InnerHeight)px</dd>
         <dt>Inner Width</dt>
-        <dd>@(Dimensions.InnerDimensions.Width)px</dd>
+        <dd>@(Dimensions.InnerWidth)px</dd>
         <dt>Outer Height</dt>
-        <dd>@(Dimensions.OuterDimensions.Height)px</dd>
+        <dd>@(Dimensions.OuterHeight)px</dd>
         <dt>Outer Width</dt>
-        <dd>@(Dimensions.OuterDimensions.Width)px</dd>
+        <dd>@(Dimensions.OuterWidth)px</dd>
     </dl>
 }
 
 @code {
 
-    private BrowserWindowDimensions? Dimensions { get; set; }
-    private BrowserWindowPageOffset? PageOffset { get; set; }
+    private WindowDimensions? Dimensions { get; set; }
+    private PageOffset? PageOffset { get; set; }
 
-    private void UpdateDimensions(BrowserWindowDimensions dimensions)
+    private void UpdateDimensions(WindowDimensions dimensions)
     {
         Dimensions = dimensions;
     }
 
-    private void UpdatePageOffset(BrowserWindowPageOffset pageOffset)
+    private void UpdatePageOffset(PageOffset pageOffset)
     {
         PageOffset = pageOffset;
     }

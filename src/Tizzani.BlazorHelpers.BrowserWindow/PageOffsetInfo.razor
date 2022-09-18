@@ -1,0 +1,49 @@
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Models
+@inject IWindowService WindowService
+@implements IDisposable
+
+@if (ChildContent != null && PageOffset != null)
+{
+    @ChildContent(PageOffset)
+}
+
+@code {
+    private DebounceTimer DebounceTimer { get; set; } = new();
+    private PageOffset? PageOffset { get; set; }
+
+    [Parameter] public RenderFragment<PageOffset>? ChildContent { get; set; }
+    [Parameter] public int Debounce { get; set; } = 300;
+    [Parameter] public EventCallback<PageOffset> OnScroll { get; set; }
+
+    public void Dispose()
+    {
+        ScrollListener.OnScroll -= DebounceTimer.Reset;
+        DebounceTimer.Dispose();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ScrollListener.OnScroll += DebounceTimer.Reset;
+        DebounceTimer.Elapsed += LoadPageOffset;
+        return LoadPageOffset();
+    }
+
+    protected override void OnParametersSet()
+    {
+        DebounceTimer.Debounce = Debounce;
+    }
+
+    private async Task LoadPageOffset()
+    {
+        PageOffset = await WindowService.GetPageOffset();
+
+        if (OnScroll.HasDelegate)
+            await OnScroll.InvokeAsync(PageOffset);
+    }
+
+    private async void LoadPageOffset(object? source, System.Timers.ElapsedEventArgs e)
+    {
+        await LoadPageOffset();
+        await InvokeAsync(StateHasChanged);
+    }
+}

@@ -1,4 +1,6 @@
-﻿@if (PageOffset == null)
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Models
+
+@if (PageOffset == null)
 {
     <p>Loading...</p>
 }
@@ -12,5 +14,5 @@ else
 
 
 @code {
-    [CascadingParameter] private BrowserWindowPageOffset? PageOffset { get; set; }
+    [CascadingParameter] private PageOffset? PageOffset { get; set; }
 }

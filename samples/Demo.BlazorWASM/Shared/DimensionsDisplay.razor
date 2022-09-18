@@ -1,4 +1,6 @@
-﻿@if (Dimensions == null)
+﻿@using Tizzani.BlazorHelpers.BrowserWindow.Models
+
+@if (Dimensions == null)
 {
     <p>Loading dimensions...</p>
 }
@@ -6,16 +8,16 @@ else
 {
     <dl>
         <dt>Inner Height</dt>
-        <dd>@(Dimensions.InnerDimensions.Height)px</dd>
+        <dd>@(Dimensions.InnerHeight)px</dd>
         <dt>Inner Width</dt>
-        <dd>@(Dimensions.InnerDimensions.Width)px</dd>
+        <dd>@(Dimensions.InnerWidth)px</dd>
         <dt>Outer Height</dt>
-        <dd>@(Dimensions.OuterDimensions.Height)px</dd>
+        <dd>@(Dimensions.OuterHeight)px</dd>
         <dt>Outer Width</dt>
-        <dd>@(Dimensions.OuterDimensions.Width)px</dd>
+        <dd>@(Dimensions.OuterWidth)px</dd>
     </dl>
 }
 
 @code  {
-    [CascadingParameter] private BrowserWindowDimensions? Dimensions { get; set; }
+    [CascadingParameter] private WindowDimensions? Dimensions { get; set; }
 }

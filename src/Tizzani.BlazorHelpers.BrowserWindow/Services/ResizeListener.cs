@@ -2,7 +2,7 @@
 
 namespace Tizzani.BlazorHelpers.BrowserWindow.Services;
 
-public class BrowserScrollListener
+public class ResizeListener : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
@@ -20,23 +20,23 @@ public class BrowserScrollListener
         }
     }
 
-    private static event Func<ValueTask>? _onScroll;
-    public static event Func<ValueTask>? OnScroll
+    private static event Func<ValueTask>? _onResize;
+    public static event Func<ValueTask>? OnResize
     {
         add
         {
-            _onScroll += value;
+            _onResize += value;
             OnSubscriptionCountChanged?.Invoke();
 
         }
         remove
         {
-            _onScroll -= value;
+            _onResize -= value;
             OnSubscriptionCountChanged?.Invoke();
         }
     }
 
-    public BrowserScrollListener(IJSRuntime jsRuntime)
+    public ResizeListener(IJSRuntime jsRuntime)
     {
         _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/Tizzani.BlazorHelpers.BrowserWindow/main.js").AsTask());
@@ -60,33 +60,33 @@ public class BrowserScrollListener
     }
 
     [JSInvokable]
-    public static async Task NotifyScroll()
+    public static async Task NotifyResize()
     {
-        if (_onScroll != null)
-            await _onScroll.Invoke();
+        if (_onResize != null)
+            await _onResize.Invoke();
     }
 
     [JSInvokable]
-    public static void NotifyScrollListenerAdded()
+    public static void NotifyResizeListenerAdded()
     {
         IsSubscribed = true;
     }
 
     [JSInvokable]
-    public static void NotifyScrollListenerRemoved()
+    public static void NotifyResizeListenerRemoved()
     {
         IsSubscribed = false;
     }
 
     private async void VerifySubscriptionState()
     {
-        var count = _onScroll?.GetInvocationList().Length ?? 0;
+        var count = _onResize?.GetInvocationList().Length ?? 0;
         var shouldSubscribe = count > 0;
 
         if (shouldSubscribe == IsSubscribed)
             return;
 
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync(shouldSubscribe ? "addScrollEventListener" : "removeScrollEventListener");
+        await module.InvokeVoidAsync(shouldSubscribe ? "addResizeEventListener" : "removeResizeEventListener");
     }
 }

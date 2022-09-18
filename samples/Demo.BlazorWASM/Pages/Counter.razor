@@ -13,22 +13,22 @@
     </div>
 </EditForm>
 
-<BrowserDimensionsInfo Context="dimensions" Debounce="ResizeDebounce">
-    <BrowserPageOffsetInfo Context="offset" Debounce="ScrollDebounce">
+<WindowDimensionsInfo Context="dimensions" Debounce="ResizeDebounce">
+    <PageOffsetInfo Context="offset" Debounce="ScrollDebounce">
         <dl>
             <dt>Page Offset</dt>
             <dd>@offset.X, @offset.Y</dd>
             <dt>Inner Height</dt>
-            <dd>@(dimensions.InnerDimensions.Height)px</dd>
+            <dd>@(dimensions.InnerHeight)px</dd>
             <dt>Inner Width</dt>
-            <dd>@(dimensions.InnerDimensions.Width)px</dd>
+            <dd>@(dimensions.InnerWidth)px</dd>
             <dt>Outer Height</dt>
-            <dd>@(dimensions.OuterDimensions.Height)px</dd>
+            <dd>@(dimensions.OuterHeight)px</dd>
             <dt>Outer Width</dt>
-            <dd>@(dimensions.OuterDimensions.Width)px</dd>
+            <dd>@(dimensions.OuterWidth)px</dd>
         </dl>
-    </BrowserPageOffsetInfo>
-</BrowserDimensionsInfo>
+    </PageOffsetInfo>
+</WindowDimensionsInfo>
 
 @code {
 
