@@ -7,14 +7,8 @@ Some helper methods for getting resize and scroll events from the browser.
 ## Setup
 
 ### Register Services
-
-##### Program.cs (Blazor WASM)
 ```csharp
 builder.Services.AddBrowserWindowService();
-```
-##### Startup.cs (Blazor Server)
-```csharp
-services.AddBrowserWindowService();
 ```
 
 ### Add Usings
