@@ -4,6 +4,8 @@ Some helper methods for getting resize and scroll events from the browser.
 
 [![Nuget](https://img.shields.io/nuget/v/Tizzani.BlazorHelpers.BrowserWindow)](https://www.nuget.org/packages/Tizzani.BlazorHelpers.BrowserWindow/1.0.0)
 
+Currently compatible with **Blazor WebAssembly** only.
+
 ## Setup
 
 ### Register Services
