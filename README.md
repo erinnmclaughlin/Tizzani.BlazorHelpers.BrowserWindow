@@ -89,18 +89,25 @@ else
 ```html
 @using Tizzani.BlazorHelpers.BrowserWindow.Models
 
-<dl>
-    <dt>Page Offset</dt>
-    <dd>@PageOffset.X, @PageOffset.Y</dd>
-    <dt>Inner Height</dt>
-    <dd>@(Dimensions.InnerHeight)px</dd>
-    <dt>Inner Width</dt>
-    <dd>@(Dimensions.InnerWidth)px</dd>
-    <dt>Outer Height</dt>
-    <dd>@(Dimensions.OuterHeight)px</dd>
-    <dt>Outer Width</dt>
-    <dd>@(Dimensions.OuterWidth)px</dd>
-</dl>
+@if (Dimensions == null || PageOffset == null)
+{
+    <p>Loading browser window info...</p>
+}
+else
+{
+    <dl>
+        <dt>Page Offset</dt>
+        <dd>@PageOffset.X, @PageOffset.Y</dd>
+        <dt>Inner Height</dt>
+        <dd>@(Dimensions.InnerHeight)px</dd>
+        <dt>Inner Width</dt>
+        <dd>@(Dimensions.InnerWidth)px</dd>
+        <dt>Outer Height</dt>
+        <dd>@(Dimensions.OuterHeight)px</dd>
+        <dt>Outer Width</dt>
+        <dd>@(Dimensions.OuterWidth)px</dd>
+    </dl>
+}
 
 @code {
     [CascadingValue] private WindowDimensions? Dimensions { get; set; }
